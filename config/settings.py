@@ -4,7 +4,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
@@ -26,7 +25,9 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt",
+    "django_filters",
     "users",
+    "wallets",
 ]
 
 MIDDLEWARE = [

@@ -17,13 +17,16 @@ class User(AbstractUser):
         max_length=50, verbose_name="Фамилия", help_text="Введите фамилию"
     )
     surname = models.CharField(
-        max_length=50, **NULLABLE, verbose_name="Отчество", help_text="Введите отчество"
+        max_length=50, **NULLABLE, verbose_name="Отчество",
+        help_text="Введите отчество"
     )
     phone = PhoneNumberField(
-        unique=True, verbose_name="Номер телефона", help_text="Введите номер телефона"
+        unique=True, verbose_name="Номер телефона",
+        help_text="Введите номер телефона"
     )
     date_of_birth = models.DateField(
-        **NULLABLE, verbose_name="Дата рождения", help_text="Введите дату рождения"
+        **NULLABLE, verbose_name="Дата рождения",
+        help_text="Введите дату рождения"
     )
 
     USERNAME_FIELD = "email"

@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from users.models import User
@@ -14,6 +16,10 @@ class Wallet(models.Model):
         on_delete=models.PROTECT,
         help_text="Владелец кошелька",
     )
+    wallet_uuid = models.UUIDField(
+        default=uuid.uuid4, verbose_name="uuid кошелька", editable=False,
+        unique=True
+    )
     account_number = models.CharField(
         max_length=20,
         unique=True,
@@ -22,11 +28,7 @@ class Wallet(models.Model):
         default=generate_unique_account_number,
     )
     balance = models.DecimalField(
-        max_digits=15,
-        decimal_places=2,
-        default=0.00,
-        verbose_name="Баланс",
-        editable=False,
+        max_digits=15, decimal_places=2, default=0.00, verbose_name="Баланс"
     )
     created_at = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата и время создания", editable=False

@@ -12,7 +12,9 @@ class UserSerializer(ModelSerializer):
             "email",
             "first_name",
             "last_name",
+            "surname",
             "phone",
+            "date_of_birth",
         )
 
 

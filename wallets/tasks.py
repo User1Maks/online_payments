@@ -1,6 +1,8 @@
+from decimal import Decimal
+
 from celery import shared_task
 from django.db import transaction
-from decimal import Decimal
+
 from .models import Wallet
 
 
@@ -11,7 +13,8 @@ def update_wallet_balance(wallet_uuid, operation_type, amount):
         amount = Decimal(amount)
 
         with transaction.atomic():
-            wallet = Wallet.objects.select_for_update().get(wallet_uuid=wallet_uuid)
+            wallet = Wallet.objects.select_for_update().get(
+                wallet_uuid=wallet_uuid)
 
             if operation_type == "DEPOSIT":
                 wallet.balance += amount
@@ -21,7 +24,7 @@ def update_wallet_balance(wallet_uuid, operation_type, amount):
                 wallet.balance -= amount
 
             wallet.save()
-        return f"Операция выполнена успешно. Текущий баланс {wallet.balance} руб"
+        return (f"Операция выполнена успешно."
+                f" Текущий баланс {wallet.balance} руб")
     except Wallet.DoesNotExist:
         return "Кошелек не найден."
-

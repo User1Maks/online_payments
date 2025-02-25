@@ -1,7 +1,8 @@
+from decimal import Decimal
+
 from rest_framework import serializers
 
 from wallets.models import Wallet
-from decimal import Decimal
 
 
 class WalletSerializer(serializers.ModelSerializer):

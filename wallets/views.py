@@ -1,12 +1,10 @@
 from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-
 from .models import Wallet
 from .permissions import IsOwner
 from .serializers import (
     OperationSerializer,
-    WalletCreateSerializer,
     WalletSerializer,
 )
 from .tasks import update_wallet_balance
@@ -15,7 +13,7 @@ from .tasks import update_wallet_balance
 class WalletCreateAPIView(generics.CreateAPIView):
     """Endpoint добавления кошелька."""
 
-    serializer_class = WalletCreateSerializer
+    serializer_class = WalletSerializer
 
     def perform_create(self, serializer):
         """Автоматически добавляет владельца кошелька."""
@@ -23,7 +21,7 @@ class WalletCreateAPIView(generics.CreateAPIView):
 
         if hasattr(user, "wallet"):
             raise ValidationError(
-                f"У Вас уже есть кошелек,"
+                f"У Вас уже есть кошелек"
                 f" номер счета: {user.wallet.account_number}"
             )
 
@@ -36,7 +34,7 @@ class WalletCreateAPIView(generics.CreateAPIView):
         if serializer.is_valid():
             self.perform_create(serializer)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class WalletRetrieveAPIView(generics.RetrieveAPIView):
@@ -78,6 +76,7 @@ class WalletOperationAPIView(generics.GenericAPIView):
                 {"detail": "Недостаточно средств"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        print("REQUEST DATA:", request.data)
 
         update_wallet_balance.delay(wallet.wallet_uuid, operation_type, amount)
 

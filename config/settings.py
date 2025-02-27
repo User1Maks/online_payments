@@ -26,7 +26,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_filters",
+    "phonenumber_field",
     "drf_yasg",
+    "django_celery_beat",
 
     "users",
     "wallets",

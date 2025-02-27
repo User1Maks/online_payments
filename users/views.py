@@ -87,19 +87,23 @@ class PasswordResetView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
 
         email = serializer.validated_data["email"]
-        user = User.objects.get(email=email)
 
-        if not user:
+        if not User.objects.filter(email=email).exists():
             return Response(
                 {"error": "Пользователь с таким email не найден."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        uid = urlsafe_base64_encode(str(user.uid).encode)
+                status=status.HTTP_404_NOT_FOUND)
+
+        user = User.objects.get(email=email)
+        uid = urlsafe_base64_encode(str(user.uid).encode())
+
         token = PasswordResetTokenGenerator().make_token(user)
         host = self.request.get_host()
-        reset_link = f"https://{host}/users/reset-password-confirm/{uid}/{token}"
+        reset_link = (
+            f"https://{host}/users/reset-password-confirm/{uid}/{token}"
+        )
 
         send_reset_password_email.delay(email, reset_link)
+        print("метод пост функция send_reset_password_email отработала ")
 
         return Response(
             {"message": "Ссылка для сброса пароля отправлена на ваш email."},
@@ -133,7 +137,7 @@ class PasswordResetConfirm(generics.GenericAPIView):
 
         decoded_uid = smart_str(urlsafe_base64_decode(uid))
 
-        user = User.objects.get(pk=decoded_uid)
+        user = User.objects.get(uid=decoded_uid)
 
         if not PasswordResetTokenGenerator().check_token(user, token):
             return Response(

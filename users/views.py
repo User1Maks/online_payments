@@ -98,17 +98,16 @@ class PasswordResetView(generics.GenericAPIView):
 
         token = PasswordResetTokenGenerator().make_token(user)
         host = self.request.get_host()
-        reset_link = (
-            f"https://{host}/users/reset-password-confirm/{uid}/{token}"
-        )
+        reset_link = \
+            f"http://{host}/users/reset-password-confirm/{uid}/{token}/"
 
         send_reset_password_email.delay(email, reset_link)
-        print("метод пост функция send_reset_password_email отработала ")
 
         return Response(
-            {"message": "Ссылка для сброса пароля отправлена на ваш email."},
-            status=status.HTTP_200_OK
-        )
+            {
+                "message": "Ссылка для сброса пароля отправлена на ваш email."
+            },
+            status=status.HTTP_200_OK)
 
 
 class PasswordResetConfirm(generics.GenericAPIView):

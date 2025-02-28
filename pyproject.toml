@@ -19,7 +19,6 @@ redis = "^5.2.1"
 celery = "^5.4.0"
 gevent = "^24.11.1"
 drf-yasg = "^1.21.9"
-django-celery-beat = "^2.7.0"
 
 
 [tool.poetry.group.dev.dependencies]

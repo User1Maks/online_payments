@@ -102,6 +102,8 @@ class PasswordResetView(generics.GenericAPIView):
             f"http://{host}/users/reset-password-confirm/{uid}/{token}/"
 
         send_reset_password_email.delay(email, reset_link)
+        print("Функция send_reset_password_email отработала")
+        print(f"request.data: {request.data}")
 
         return Response(
             {
@@ -135,7 +137,6 @@ class PasswordResetConfirm(generics.GenericAPIView):
         new_password = serializer.validated_data["new_password"]
 
         decoded_uid = smart_str(urlsafe_base64_decode(uid))
-
         user = User.objects.get(uid=decoded_uid)
 
         if not PasswordResetTokenGenerator().check_token(user, token):

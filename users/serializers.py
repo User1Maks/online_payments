@@ -6,16 +6,13 @@ from users.models import User
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для модели пользователей."""
 
+    password = serializers.CharField(write_only=True)
+    uid = serializers.UUIDField(write_only=True)
+
     class Meta:
         model = User
-        fields = (
-            "email",
-            "first_name",
-            "last_name",
-            "surname",
-            "phone",
-            "date_of_birth",
-        )
+        fields = ("id", "password", "email", "first_name", "last_name",
+                  "surname", "phone", "date_of_birth", "uid",)
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -23,14 +20,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = (
-            "email",
-            "first_name",
-            "last_name",
-            "surname",
-            "phone",
-            "date_of_birth",
-        )
+        fields = ("email", "first_name", "last_name", "surname", "phone",
+                  "date_of_birth",)
 
 
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):

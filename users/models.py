@@ -35,7 +35,6 @@ class User(AbstractUser):
         default=uuid.uuid4,
         editable=False,
         unique=True
-
     )
 
     USERNAME_FIELD = "email"
